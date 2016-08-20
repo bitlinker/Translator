@@ -36,14 +36,30 @@ apply plugin: 'com.neenbedankt.android-apt'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    androidTestCompile 'junit:junit:4.12'
+
+    // Google
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.google.dagger:dagger:2.6'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+
+    // Retrofit
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
+
+    // Dagger
+    compile 'com.google.dagger:dagger:2.6'
     apt 'com.google.dagger:dagger-compiler:2.6'
+
+    // Butterknife
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
+
+    // JavaRx
     compile 'io.reactivex:rxjava:1.1.9'
 
+    // StorIOSQLite
+    compile 'com.pushtorefresh.storio:sqlite:1.10.0'
+    compile 'com.pushtorefresh.storio:sqlite-annotations:1.10.0'
+    apt 'com.pushtorefresh.storio:sqlite-annotations-processor:1.10.0'
 }

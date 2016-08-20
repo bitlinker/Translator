@@ -13,8 +13,15 @@
     tools:showIn="@layout/activity_main"
     tools:context="com.example.bitlinker.translator.MainActivity">
 
-    <TextView
-        android:text="Hello World!"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/txtSearch"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/lstTranslations"
+        android:layout_below="@+id/txtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 </RelativeLayout>

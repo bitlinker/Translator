@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Translator</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="translator_copyright">Переведено сервисом «Яндекс.Переводчик»</string>
+    <string name="translator_copyright_link">http://translate.yandex.ru/</string>
+</resources>

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.bitlinker.translator.model.TranslatedText;
+import com.example.bitlinker.translator.sqllitedb.StorioDAO;
 import com.example.bitlinker.translator.translateapi.TranslateApi;
 import com.example.bitlinker.translator.translateapi.TranslateException;
 import com.example.bitlinker.translator.translateapi.yandex.YandexTranslateApi;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Inject
     TranslateApi mTranslateApi;
 
+    @Inject
+    StorioDAO mDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } catch (TranslateException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

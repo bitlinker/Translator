@@ -2,6 +2,9 @@
     <string name="app_name">Translator</string>
     <string name="action_settings">Settings</string>
 
-    <string name="translator_copyright">Переведено сервисом «Яндекс.Переводчик»</string>
-    <string name="translator_copyright_link">http://translate.yandex.ru/</string>
+    <string name="translate_or_search">Translate or search...</string>
+
+    <string name="translator_copyright"><a href="http://translate.yandex.ru/">Translated with «Yandex.Translate»</a></string>
+
+    <string name="error_cant_translate">Can\'t translate this word</string>
 </resources>

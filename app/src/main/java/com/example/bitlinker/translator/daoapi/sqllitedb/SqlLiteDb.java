@@ -1,4 +1,4 @@
-package com.example.bitlinker.translator.sqllitedb;
+package com.example.bitlinker.translator.daoapi.sqllitedb;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

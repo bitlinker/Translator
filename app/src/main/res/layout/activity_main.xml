@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.bitlinker.translator.MainActivity">
+    tools:context="com.example.bitlinker.translator.ui.view.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
@@ -22,14 +22,55 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <EditText
+            android:id="@+id/txtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/translate_or_search"
+            android:maxLines="1" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lstTranslations"
+            android:layout_below="@+id/txtSearch"
+            android:layout_above="@+id/txtCopyright"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <requestFocus/>
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/txtCopyright"
+            android:text="@string/translator_copyright"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:textColorLink="@android:color/primary_text_dark"/>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/plus" />
+        android:layout_marginRight="@dimen/fab_margin_horiz"
+        android:layout_marginEnd="@dimen/fab_margin_horiz"
+        android:layout_marginBottom="@dimen/fab_margin_vert"
+        android:src="@drawable/plus"
+        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,4 +1,4 @@
-package com.example.bitlinker.translator.sqllitedb;
+package com.example.bitlinker.translator.daoapi.sqllitedb;
 
 import com.example.bitlinker.translator.model.TranslatedText;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;

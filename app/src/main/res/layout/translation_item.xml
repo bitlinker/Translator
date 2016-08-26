@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/cardview_margin_vert"
+        card_view:cardElevation="0dp"
+        card_view:cardMaxElevation="0dp"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txtOriginalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="original"/>
+
+            <TextView
+                android:id="@+id/txtTranslatedText"
+                android:layout_below="@+id/txtOriginalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="translated"/>
+
+            <TextView
+                android:id="@+id/txtLanguage"
+                android:layout_toRightOf="@+id/txtOriginalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="right"
+                style="@android:style/TextAppearance.DeviceDefault.Medium"
+                android:text="language"/>
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

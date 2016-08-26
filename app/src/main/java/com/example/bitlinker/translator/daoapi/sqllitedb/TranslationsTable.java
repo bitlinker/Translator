@@ -1,8 +1,4 @@
-package com.example.bitlinker.translator.sqllitedb;
-
-import android.support.annotation.NonNull;
-
-import com.example.bitlinker.translator.model.TranslatedText;
+package com.example.bitlinker.translator.daoapi.sqllitedb;
 
 /**
  * Created by bitlinker on 20.08.2016.

@@ -1,20 +1,17 @@
 package com.example.bitlinker.translator.daoapi.sqllitedb;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.example.bitlinker.translator.model.TranslatedText;
-import com.example.bitlinker.translator.translateapi.TranslateException;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-import rx.Completable;
 import rx.Single;
 import rx.exceptions.OnErrorThrowable;
 
@@ -41,62 +38,66 @@ public class StorioDAO implements IDaoApi {
         }
     }
 
-    public Completable put(TranslatedTextEntry entry) {
-        return mStorio
-                .put()
-                .object(entry)
-                .prepare()
-                .asRxCompletable();
+    private List<TranslatedText> mapList(List<TranslatedTextEntry> entryList) {
+        List<TranslatedText> textList = new ArrayList<>(entryList.size());
+        for (TranslatedTextEntry entry : entryList) {
+            textList.add(entry.toTranslatedText());
+        }
+        return textList;
     }
 
-    public Completable delete(TranslatedTextEntry entry) {
-        return mStorio
-                .delete()
-                .object(entry)
-                .prepare()
-                .asRxCompletable();
-    }
-
-    public List<TranslatedTextEntry> getAll() {
-        return mStorio
-                .get()
-                .listOfObjects(TranslatedTextEntry.class)
-                .withQuery(Query.builder()
-                        .table(TranslationsTable.TABLE)
-                        .build())
-                .prepare()
-                .executeAsBlocking();
-    }
-
-    public Single<List<TranslatedTextEntry>> getByTextOrTranslation(String value) {
-        final String wildcard = "%" + value + "%";
-        return mStorio
-                .get()
-                .listOfObjects(TranslatedTextEntry.class)
-                .withQuery(Query.builder()
-                        .table(TranslationsTable.TABLE)
-                        .where("LOWER(" + TranslationsTable.COLUMN_ORIGINAL_TEXT + ") LIKE LOWER(?) OR LOWER(" + TranslationsTable.COLUMN_TRANSLATED_TEXT + ") LIKE LOWER(?)")
-                        .whereArgs(new ArrayList<Object>() {{add(wildcard); add(wildcard);}})
-                        .build())
-                .prepare()
-                .asRxSingle();
+    private Query getQuery(String filter) {
+        Query query;
+        if (TextUtils.isEmpty(filter)) {
+            query = Query.builder()
+                    .table(TranslationsTable.TABLE)
+                    .build();
+        } else {
+            final String wildcard = "%" + filter + "%";
+            query = Query.builder()
+                    .table(TranslationsTable.TABLE)
+                    .where("LOWER(" + TranslationsTable.COLUMN_ORIGINAL_TEXT + ") LIKE LOWER(?) OR LOWER(" + TranslationsTable.COLUMN_TRANSLATED_TEXT + ") LIKE LOWER(?)")
+                    .whereArgs(new ArrayList<Object>() {{add(wildcard); add(wildcard);}})
+                    .build();
+        }
+        return query;
     }
 
     @Override
     public Single<List<TranslatedText>> getEntriesList(String filter) {
-        return Single.fromCallable(() -> new ArrayList<TranslatedText>(2)); // TODO
+        return mStorio
+                .get()
+                .listOfObjects(TranslatedTextEntry.class)
+                .withQuery(getQuery(filter))
+                .prepare()
+                .asRxSingle()
+                .map(value-> mapList(value));
     }
 
     @Override
-    public Single<Boolean> addEntry(TranslatedText entry) {
+    public Single<TranslatedText> addEntry(TranslatedText entry) {
         return mStorio
                 .put()
                 .object(TranslatedTextEntry.fromTranslatedText(entry))
                 .prepare()
                 .asRxSingle()
                 .map(putResult -> {
-                    Boolean res = putResult.wasInserted() || putResult.wasUpdated();
-                    return res;
+                    if (!putResult.wasInserted() && !putResult.wasUpdated()) {
+                        throw OnErrorThrowable.from(new IOException("Can't add entry to DB"));
+                    }
+                    return entry;
+                });
+    }
+
+    @Override
+    public Single<Boolean> deleteEntry(TranslatedText entry) {
+        return mStorio
+                .delete()
+                .object(TranslatedTextEntry.fromTranslatedText(entry))
+                .prepare()
+                .asRxSingle()
+                .map(deleteResult -> {
+                    return deleteResult.numberOfRowsDeleted() > 0;
                 });
     }
 }

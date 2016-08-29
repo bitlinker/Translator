@@ -11,6 +11,7 @@ import rx.Single;
  */
 
 public interface IMainInteractor {
-    Single<List<TranslatedText>> getTranslatedList(String filter);
-    Single<Boolean> translateAndAddItem(String text);
+    Single<List<TranslatedText>> getTranslatedItems(String filter);
+    Single<TranslatedText> translateAndAddItem(String text);
+    Single<Boolean> deleteItem(TranslatedText entry);
 }

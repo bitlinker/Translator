@@ -14,5 +14,6 @@ import rx.Single;
 
 public interface IDaoApi extends Closeable {
     Single<List<TranslatedText>> getEntriesList(String filter);
-    Single<Boolean> addEntry(TranslatedText entry);
+    Single<TranslatedText> addEntry(TranslatedText entry);
+    Single<Boolean> deleteEntry(TranslatedText entry);
 }

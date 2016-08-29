@@ -47,28 +47,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.fab) FloatingActionButton mFab;
     @BindView(R.id.txtCopyright) TextView mCopyrightText;
 
-    public static class TranslationsListAdapter extends RecyclerView.Adapter<TranslationsListAdapter.TranslationViewHolder> {
+    private TranslationsListAdapter mAdapter;
+
+    public class TranslationsListAdapter extends RecyclerView.Adapter<TranslationsListAdapter.TranslationViewHolder> {
         List<TranslatedText> mItems = new ArrayList<>();
 
         public TranslationsListAdapter() {
-            // TODO: dbg
-            mItems.add(new TranslatedText("Test", "Тест", "ru"));
-            mItems.add(new TranslatedText("Test", "Тест3333", "ru"));
-            mItems.add(new TranslatedText("Test44444ffffffffffffffffffffffffffffffffffffffffff444", "Тест222ddddddddddddddddddddddddddddddddddddddddddddddddddd", "ru"));
+            updateList("");
         }
 
-        // TODO: subscribe
-
-        void updateList() {
+        void updateList(String filter) {
             Subscriber<List<TranslatedText>> loadDataSubscriber = new Subscriber<List<TranslatedText>>() {
 
                 @Override
                 public void onCompleted() {
+                    unsubscribe();
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     Log.e(TAG, "Error loading items", e);
+                    showError(e); // TODO: error reporting in presenter
+                    unsubscribe();
                 }
 
                 @Override
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     notifyDataSetChanged();
                 }
             };
-            // TODO: subscribe?
+            mMainPresenter.onSearchTextChanged(filter).subscribe(loadDataSubscriber);
         }
 
         @Override
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return mItems.size();
         }
 
-        static class TranslationViewHolder extends RecyclerView.ViewHolder {
+        class TranslationViewHolder extends RecyclerView.ViewHolder {
             @BindView(R.id.cardView) CardView mCardView;
             @BindView(R.id.txtOriginalText) TextView mOriginalText;
             @BindView(R.id.txtTranslatedText) TextView mTranslatedText;
@@ -136,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String newText = charSequence.toString();
-                mMainPresenter.onSearchTextChanged(newText);
+                //mMainPresenter.onSearchTextChanged(newText);
+                mAdapter.updateList(newText);
             }
 
             @Override
@@ -153,15 +154,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void initList() {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         mLstTranslations.setLayoutManager(llm);
-        TranslationsListAdapter adapter = new TranslationsListAdapter();
-        mLstTranslations.setAdapter(adapter);
+        mAdapter = new TranslationsListAdapter();
+        mLstTranslations.setAdapter(mAdapter);
         mLstTranslations.setHasFixedSize(true);
     }
 
     @Override
     @OnClick(R.id.fab)
     public void onClick(View v) {
-        mMainPresenter.onAddButtonPressed(mTxtSearch.getText().toString());
+        Subscriber<TranslatedText> subscriber = new Subscriber<TranslatedText>() {
+
+            @Override
+            public void onCompleted() {
+                unsubscribe();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "Error loading items", e);
+                showError(e); // TODO: error reporting in presenter
+                unsubscribe();
+            }
+
+            @Override
+            public void onNext(TranslatedText translatedText) {
+                mTxtSearch.getText().clear();
+                mAdapter.updateList("");
+            }
+        };
+        mMainPresenter.onAddButtonPressed(mTxtSearch.getText().toString()).subscribe(subscriber);
     }
 
     @Override
@@ -174,13 +195,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void updateTranslationsList() {
-        // TODO
-    }
-
-    @Override
-    public void showError() {
-        Snackbar.make(mFab, getString(R.string.error_cant_translate), Snackbar.LENGTH_SHORT).show(); // TODO
-        //.setAction("Action", null).show();
+    public void showError(Throwable e) {
+        Snackbar.make(mFab, e.getMessage(), Snackbar.LENGTH_SHORT).show(); // TODO
+        //Snackbar.make(mFab, getString(R.string.error_cant_translate), Snackbar.LENGTH_SHORT).show(); // TODO
     }
 }

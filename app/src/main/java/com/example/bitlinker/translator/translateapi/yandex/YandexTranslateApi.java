@@ -102,7 +102,7 @@ public class YandexTranslateApi implements ITranslateApi {
                 .onErrorResumeNext(throwable -> Observable.error(throwable))
                 .map(value -> {
                     try {
-                        return parseResponse(value);
+                        return parseResponse(text, value);
                     } catch (YandexTranslateException e) {
                         throw OnErrorThrowable.from(e);
                     }
@@ -131,7 +131,7 @@ public class YandexTranslateApi implements ITranslateApi {
         }
     }
 
-    private TranslatedText parseResponse(Response<TranslateResponse> response) throws YandexTranslateException {
+    private TranslatedText parseResponse(String originalText, Response<TranslateResponse> response) throws YandexTranslateException {
         checkCode(response.code());
         TranslateResponse responseBody = response.body();
         if (responseBody != null) {
@@ -140,7 +140,7 @@ public class YandexTranslateApi implements ITranslateApi {
             if (textList != null && textList.size() > 0) {
                 String translatedText = responseBody.mText.get(0);
                 String translatedLang = responseBody.mLang;
-                return new TranslatedText("TODO", translatedText, translatedLang); // TODO
+                return new TranslatedText(-1, originalText, translatedText, translatedLang);
             } else {
                 throw new YandexTranslateException("No text in response");
             }
@@ -148,5 +148,4 @@ public class YandexTranslateApi implements ITranslateApi {
             throw new YandexTranslateException("Response body is null");
         }
     }
-
 }

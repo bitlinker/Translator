@@ -7,11 +7,10 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 /**
  * Created by bitlinker on 20.08.2016.
  */
-
 @StorIOSQLiteType(table = TranslationsTable.TABLE)
 public class TranslatedTextEntry {
     @StorIOSQLiteColumn(name = TranslationsTable.COLUMN_ID, key = true)
-    Long id;
+    Long mId;
 
     @StorIOSQLiteColumn(name = TranslationsTable.COLUMN_ORIGINAL_TEXT)
     String mOriginalText;
@@ -28,9 +27,15 @@ public class TranslatedTextEntry {
 
     public static TranslatedTextEntry fromTranslatedText(TranslatedText text) {
         TranslatedTextEntry entry = new TranslatedTextEntry();
+        entry.mId = (text.getId() != -1) ? text.getId() : null;
         entry.mOriginalText = text.getOriginalText();
         entry.mTranslatedText = text.getTranslatedText();
         entry.mLanguage = text.getLanguage();
         return entry;
+    }
+
+    public TranslatedText toTranslatedText() {
+        TranslatedText text = new TranslatedText(mId, mOriginalText, mTranslatedText, mLanguage);
+        return text;
     }
 }

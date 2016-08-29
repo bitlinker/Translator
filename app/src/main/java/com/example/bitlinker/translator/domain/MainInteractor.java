@@ -1,21 +1,12 @@
 package com.example.bitlinker.translator.domain;
 
-import android.util.Log;
-
-import com.example.bitlinker.translator.App;
 import com.example.bitlinker.translator.daoapi.sqllitedb.IDaoApi;
 import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.translateapi.ITranslateApi;
-import com.example.bitlinker.translator.translateapi.TranslateException;
 
-import java.util.IllegalFormatException;
 import java.util.List;
 
-import javax.inject.Inject;
-
-import rx.Observable;
 import rx.Single;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -36,61 +27,33 @@ public class MainInteractor implements IMainInteractor {
     // TODO: language abstraction
     public static final String DEST_LANG = "ru";
 
-//    public void translateAndAddText(String text) throws TranslateException {
-//        //TranslatedText translatedText = mTranslateApi.translate(text, DEST_LANG);
-//
-//        // TODO: duplicated exception
-//        //mDaoApi.put();
-//
-//
-////        mDaoApi.getEntriesList("test")
-////                .subscribeOn(Schedulers.io())
-////                .observeOn(AndroidSchedulers.mainThread())
-////                .subscribe(List<TranslatedText> -> )
-////        )
-//    }
-
     @Override
-    public Single<List<TranslatedText>> getTranslatedList(String filter) {
+    public Single<List<TranslatedText>> getTranslatedItems(String filter) {
+        // TODO: errors processing
+        // TODO: separate filtered and unfiltered states
         return mDaoApi.getEntriesList(filter)
                 .toObservable()
-                .onErrorResumeNext(throwable -> Observable.error(
-                        new IllegalArgumentException("todotodo", throwable)))
-                .toSingle();
+                /*.onErrorResumeNext(throwable -> Observable.error(
+                        new IllegalArgumentException("todotodo", throwable)))*/
+                .toSingle()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
-    public Single<Boolean> translateAndAddItem(String text) {
-        /*Single<TranslatedText>
-        TranslatedText ent
-        return mDaoApi.addEntry();*/
-        // TODO
-
-        Subscriber<Boolean> subscriber = new Subscriber<Boolean>() {
-            @Override
-            public void onCompleted() {
-                Log.e(TAG, "Completed");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "Error: " + e.toString());
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(Boolean translatedText) {
-                //Log.e(TAG, "Next: " + translatedText.getTranslatedText());
-                this.unsubscribe();
-            }
-        };
-
+    public Single<TranslatedText> translateAndAddItem(String text) {
         Single<TranslatedText> translated = mTranslateApi.translate(text, DEST_LANG);
-        translated
-            .flatMap(value -> mDaoApi.addEntry(value))
+        return translated
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(subscriber);
-        return null;
+            .observeOn(Schedulers.io())
+            .flatMap(value -> mDaoApi.addEntry(value))
+            .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public Single<Boolean> deleteItem(TranslatedText entry) {
+        return mDaoApi.deleteEntry(entry)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

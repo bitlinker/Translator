@@ -6,6 +6,5 @@ package com.example.bitlinker.translator.ui.view;
 
 public interface IMainView {
     void showAddButton(boolean show);
-    void updateTranslationsList();
-    void showError();
+    void showError(Throwable e);
 }

@@ -5,6 +5,8 @@ import com.example.bitlinker.translator.translateapi.yandex.YandexTranslateApi;
 
 import org.junit.Test;
 
+import rx.Single;
+
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -15,7 +17,8 @@ public class YandexTranslateApiTest {
     @Test
     public void TranslateWorks() throws Exception {
         YandexTranslateApi api = new YandexTranslateApi();
-        TranslatedText translated = api.translate("Hello", "ru");
-        assertEquals(translated.getTranslatedText(), "Привет");
+        Single<TranslatedText> translated = api.translate("Hello", "ru");
+        TranslatedText translatedText = translated.toBlocking().value();
+        assertEquals(translatedText.getTranslatedText(), "Привет");
     }
 }

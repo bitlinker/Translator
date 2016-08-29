@@ -4,7 +4,14 @@ import android.text.TextUtils;
 
 import com.example.bitlinker.translator.domain.IMainInteractor;
 import com.example.bitlinker.translator.domain.MainInteractor;
+import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.ui.view.IMainView;
+
+import java.util.List;
+
+import rx.Single;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by bitlinker on 22.08.2016.
@@ -30,19 +37,17 @@ public class MainPresenter implements IMainPresenter {
     }
 
     @Override
-    public void onSearchTextChanged(String text) {
+    public Single<List<TranslatedText>> onSearchTextChanged(String text) {
         if (TextUtils.isEmpty(text)) {
             mMainView.showAddButton(false);
         } else {
             mMainView.showAddButton(true);
         }
+        return mMainInteractor.getTranslatedItems(text);
     }
 
     @Override
-    public void onAddButtonPressed(String text) {
-        // TODO: add
-        //mMainView.showAddButton(false); // TODO
-        //mMainView.showError();
-        mMainInteractor.translateAndAddItem(text);
+    public Single<TranslatedText> onAddButtonPressed(String text) {
+        return mMainInteractor.translateAndAddItem(text);
     }
 }

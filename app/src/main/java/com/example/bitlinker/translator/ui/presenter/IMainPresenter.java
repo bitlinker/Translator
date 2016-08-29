@@ -15,6 +15,7 @@ public interface IMainPresenter {
     void bindView(IMainView iMainView);
     void unbindView();
 
-    Single<List<TranslatedText>> onSearchTextChanged(String text);
-    Single<TranslatedText> onAddButtonPressed(String text);
+    void onSearchTextChanged(String text);
+    void onAddButtonPressed();
+    void onDeleteItemPressed(TranslatedText item);
 }

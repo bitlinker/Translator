@@ -1,13 +1,15 @@
 package com.example.bitlinker.translator.domain;
 
-import com.example.bitlinker.translator.daoapi.sqllitedb.IDaoApi;
+import android.text.TextUtils;
+
+import com.example.bitlinker.translator.daoapi.IDaoApi;
 import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.translateapi.ITranslateApi;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Single;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -15,7 +17,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class MainInteractor implements IMainInteractor {
-    private static final String TAG = "MainInteractor";
+    public static final String DEST_LANG = "ru";
+
     private ITranslateApi mTranslateApi;
     private IDaoApi mDaoApi;
 
@@ -24,36 +27,36 @@ public class MainInteractor implements IMainInteractor {
         mDaoApi = daoApi;
     }
 
-    // TODO: language abstraction
-    public static final String DEST_LANG = "ru";
+
 
     @Override
     public Single<List<TranslatedText>> getTranslatedItems(String filter) {
         // TODO: errors processing
-        // TODO: separate filtered and unfiltered states
-        return mDaoApi.getEntriesList(filter)
-                .toObservable()
-                /*.onErrorResumeNext(throwable -> Observable.error(
-                        new IllegalArgumentException("todotodo", throwable)))*/
-                .toSingle()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+
+        Single<List<TranslatedText>> itemsSingle;
+        if (TextUtils.isEmpty(filter)) {
+            itemsSingle = mDaoApi.getEntriesList();
+        } else {
+            itemsSingle = mDaoApi.getEntriesListFiltered(filter);
+        }
+
+        return itemsSingle
+                .subscribeOn(Schedulers.io());
     }
 
     @Override
     public Single<TranslatedText> translateAndAddItem(String text) {
         Single<TranslatedText> translated = mTranslateApi.translate(text, DEST_LANG);
         return translated
+            //.delay(3000, TimeUnit.MILLISECONDS) // TODO: DBG
             .subscribeOn(Schedulers.io())
             .observeOn(Schedulers.io())
-            .flatMap(value -> mDaoApi.addEntry(value))
-            .observeOn(AndroidSchedulers.mainThread());
+            .flatMap(value -> mDaoApi.addEntry(value));
     }
 
     @Override
     public Single<Boolean> deleteItem(TranslatedText entry) {
         return mDaoApi.deleteEntry(entry)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io());
     }
 }

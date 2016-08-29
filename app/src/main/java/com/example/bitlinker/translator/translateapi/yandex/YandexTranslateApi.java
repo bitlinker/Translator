@@ -99,7 +99,7 @@ public class YandexTranslateApi implements ITranslateApi {
     public Single<TranslatedText> translate(String text, String destLang) {
         Observable<Response<TranslateResponse>> translated = mTranslationService.translateText(text, destLang);
         return translated
-                .onErrorResumeNext(throwable -> Observable.error(throwable))
+                .onErrorResumeNext(throwable -> Observable.error(throwable)) // TODO: wtf?
                 .map(value -> {
                     try {
                         return parseResponse(text, value);
@@ -140,7 +140,7 @@ public class YandexTranslateApi implements ITranslateApi {
             if (textList != null && textList.size() > 0) {
                 String translatedText = responseBody.mText.get(0);
                 String translatedLang = responseBody.mLang;
-                return new TranslatedText(-1, originalText, translatedText, translatedLang);
+                return new TranslatedText(originalText, translatedText, translatedLang);
             } else {
                 throw new YandexTranslateException("No text in response");
             }

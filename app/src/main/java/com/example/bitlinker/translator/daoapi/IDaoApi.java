@@ -1,4 +1,4 @@
-package com.example.bitlinker.translator.daoapi.sqllitedb;
+package com.example.bitlinker.translator.daoapi;
 
 import com.example.bitlinker.translator.model.TranslatedText;
 
@@ -13,7 +13,9 @@ import rx.Single;
  */
 
 public interface IDaoApi extends Closeable {
-    Single<List<TranslatedText>> getEntriesList(String filter);
+    Single<List<TranslatedText>> getEntriesList();
+    Single<List<TranslatedText>> getEntriesListFiltered(String filter);
+
     Single<TranslatedText> addEntry(TranslatedText entry);
     Single<Boolean> deleteEntry(TranslatedText entry);
 }

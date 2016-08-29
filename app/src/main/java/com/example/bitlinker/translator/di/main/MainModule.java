@@ -3,9 +3,8 @@ package com.example.bitlinker.translator.di.main;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.example.bitlinker.translator.App;
-import com.example.bitlinker.translator.daoapi.sqllitedb.IDaoApi;
-import com.example.bitlinker.translator.daoapi.sqllitedb.StorioDAO;
+import com.example.bitlinker.translator.daoapi.IDaoApi;
+import com.example.bitlinker.translator.daoapi.sqllitedb.StorioDaoApi;
 import com.example.bitlinker.translator.domain.IMainInteractor;
 import com.example.bitlinker.translator.domain.MainInteractor;
 import com.example.bitlinker.translator.translateapi.ITranslateApi;
@@ -31,7 +30,7 @@ public class MainModule {
     @Provides
     @NonNull
     public IDaoApi provideDaoApi(Context context) {
-        return new StorioDAO(context);
+        return new StorioDaoApi(context);
     }
 
     @Provides

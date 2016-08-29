@@ -16,6 +16,10 @@ public class TranslatedText {
         mLanguage = language;
     }
 
+    public TranslatedText(String originalText, String translatedText, String language) {
+        this(-1, originalText, translatedText, language);
+    }
+
     public long getId() {
         return mId;
     }

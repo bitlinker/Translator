@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 public class YandexTranslateApiTest {
     @Test
-    public void TranslateWorks() throws Exception {
+    public void testTranslate() throws Exception {
         YandexTranslateApi api = new YandexTranslateApi();
         Single<TranslatedText> translated = api.translate("Hello", "ru");
         TranslatedText translatedText = translated.toBlocking().value();

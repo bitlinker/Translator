@@ -125,7 +125,7 @@ public class MainPresenter implements IMainPresenter {
             @Override
             public void onCompleted() {
                 if (mMainView != null) {
-                    updateList(mCurText);
+                    mMainView.onListItemRemoved(item);
                 }
                 unsubscribe();
             }

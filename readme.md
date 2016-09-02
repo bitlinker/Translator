@@ -1,4 +1,17 @@
 TODO:
 - permissions on demand
-- update sdk to 24
 - add nonnull anotations
+- coordinator layout & animations
+- partial list update
+- sorting
+- fragments instead of activities
+- preferences
+- about
+- rm retrolambda
+- clear up dagger
+- improve xml
+- lint
+- proguard
+- unit tests
+- instrumentation tests
+- mockito, android

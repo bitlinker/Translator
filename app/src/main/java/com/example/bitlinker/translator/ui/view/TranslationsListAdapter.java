@@ -1,11 +1,15 @@
 package com.example.bitlinker.translator.ui.view;
 
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bitlinker.translator.R;
 import com.example.bitlinker.translator.model.TranslatedText;
@@ -27,9 +31,18 @@ public class TranslationsListAdapter extends RecyclerView.Adapter<TranslationsLi
         mLongClickListener = longClickListener;
     }
 
-    void updateList(List<TranslatedText> items) {
+    public void updateList(List<TranslatedText> items) {
         mItems = items;
         notifyDataSetChanged();
+    }
+
+    public void removeItem(TranslatedText item) {
+        // TODO: to presenter...
+        int index = mItems.indexOf(item);
+        if (index != -1) {
+            mItems.remove(index);
+            notifyItemRemoved(index);
+        }
     }
 
     @Override
@@ -63,14 +76,40 @@ public class TranslationsListAdapter extends RecyclerView.Adapter<TranslationsLi
         public TranslationViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            // TODO: external listener
+            mCardView.setOnLongClickListener(mLongClickListener);
+            final SwipeDismissBehavior<CardView> swipeDismissBehavior = new SwipeDismissBehavior();
+            swipeDismissBehavior.setSwipeDirection(SwipeDismissBehavior.SWIPE_DIRECTION_ANY);
+            swipeDismissBehavior.setListener(
+                    new SwipeDismissBehavior.OnDismissListener() {
+                        @Override public void onDismiss(View view) {
+                            if (mLongClickListener != null) {
+                                mLongClickListener.onLongClick(mCardView);
+
+                                // TODO: remove me...
+                                int pos = getAdapterPosition();
+                            }
+                        }
+
+                        @Override
+                        public void onDragStateChanged(int state) {}
+                    });
+
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mCardView.getLayoutParams();
+            params.setBehavior(swipeDismissBehavior);
         }
 
         public void applyData(TranslatedText text) {
             mOriginalText.setText(text.getOriginalText());
             mTranslatedText.setText(text.getTranslatedText());
             mLanguage.setText(text.getLanguage());
-            mCardView.setOnLongClickListener(mLongClickListener);
             mCardView.setTag(text);
+
+            // TODO: Here is the layout data reset
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mCardView.getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
+            mCardView.setLayoutParams(params);
         }
     }
 }

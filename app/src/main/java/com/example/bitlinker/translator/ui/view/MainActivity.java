@@ -148,6 +148,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onListItemRemoved(TranslatedText item) {
+        mAdapter.removeItem(item);
+    }
+
+    @Override
     public void showProgressBar(boolean isShow) {
         mProgressBar.setVisibility(isShow ? View.VISIBLE : View.GONE);
         mLstTranslations.setEnabled(!isShow);

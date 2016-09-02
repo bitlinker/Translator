@@ -1,5 +1,7 @@
 package com.example.bitlinker.translator.ui.view;
 
+import android.support.annotation.NonNull;
+
 import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.model.TranslationError;
 
@@ -12,7 +14,9 @@ import java.util.List;
 public interface IMainView {
     void showAddButton(boolean isShow);
     void setSearchText(String text);
-    void updateList(List<TranslatedText> items);
+    void updateList(@NonNull List<TranslatedText> items);
+    void onListItemRemoved(TranslatedText item);
     void showProgressBar(boolean isShow);
-    void showError(TranslationError e);
+    void showError(@NonNull TranslationError e);
+
 }

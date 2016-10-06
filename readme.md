@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bitlinker/Translator.svg?branch=master)](https://travis-ci.org/bitlinker/Translator)
+
 TODO:
 - permissions on demand
 - add nonnull anotations

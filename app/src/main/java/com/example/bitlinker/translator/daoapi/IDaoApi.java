@@ -1,9 +1,10 @@
 package com.example.bitlinker.translator.daoapi;
 
+import android.support.annotation.NonNull;
+
 import com.example.bitlinker.translator.model.TranslatedText;
 
 import java.io.Closeable;
-import java.io.IOException;
 import java.util.List;
 
 import rx.Single;
@@ -13,9 +14,9 @@ import rx.Single;
  */
 
 public interface IDaoApi extends Closeable {
-    Single<List<TranslatedText>> getEntriesList();
-    Single<List<TranslatedText>> getEntriesListFiltered(String filter);
+    @NonNull Single<List<TranslatedText>> getEntriesList();
+    @NonNull Single<List<TranslatedText>> getEntriesListFiltered(@NonNull String filter);
 
-    Single<TranslatedText> addEntry(TranslatedText entry);
-    Single<Boolean> deleteEntry(TranslatedText entry);
+    @NonNull Single<TranslatedText> addEntry(@NonNull TranslatedText entry);
+    @NonNull Single<Boolean> deleteEntry(@NonNull TranslatedText entry);
 }

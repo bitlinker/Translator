@@ -1,5 +1,7 @@
 package com.example.bitlinker.translator.daoapi.sqllitedb;
 
+import android.support.annotation.NonNull;
+
 /**
  * Created by bitlinker on 20.08.2016.
  */
@@ -15,7 +17,7 @@ public class TranslationsTable {
     private TranslationsTable() {
     }
 
-    public static String getCreateTableQuery() {
+    public static @NonNull String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "("
                 + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, "
                 + COLUMN_ORIGINAL_TEXT + " TEXT NOT NULL, "
@@ -24,7 +26,7 @@ public class TranslationsTable {
                 + ");";
     }
 
-    public static String getDropTableQuery() {
+    public static @NonNull String getDropTableQuery() {
         return "DROP TABLE " + TABLE + ";";
     }
 }

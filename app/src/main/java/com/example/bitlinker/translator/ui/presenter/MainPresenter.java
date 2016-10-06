@@ -40,11 +40,6 @@ public class MainPresenter implements IMainPresenter {
     @Override
     public void onSearchTextChanged(String text) {
         mCurText = text;
-        if (TextUtils.isEmpty(text)) {
-            mMainView.showAddButton(false);
-        } else {
-            mMainView.showAddButton(true);
-        }
         updateList(mCurText);
     }
 
@@ -109,6 +104,7 @@ public class MainPresenter implements IMainPresenter {
             public void onNext(List<TranslatedText> items) {
                 if (mMainView != null) {
                     mMainView.updateList(items);
+                    mMainView.showAddButton(items.size() == 0 && !TextUtils.isEmpty(filter));
                 }
             }
         };

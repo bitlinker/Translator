@@ -8,16 +8,17 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Inject
     IMainPresenter mMainPresenter;
 
-    @BindView(R.id.txtSearch) EditText mTxtSearch;
     @BindView(R.id.lstTranslations) RecyclerView mLstTranslations;
     @BindView(R.id.toolbar) Toolbar mToolbar;
     @BindView(R.id.fab) FloatingActionButton mFab;
@@ -66,20 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // TODO: coordinator layout for search; custom scroll behaviours
         mCopyrightText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        mTxtSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String newText = charSequence.toString();
-                mMainPresenter.onSearchTextChanged(newText);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         mLstTranslations.setLayoutManager(llm);
@@ -120,6 +106,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        MenuItem searchMenuItem = menu.findItem(R.id.mnu_search);
+        SearchView searchActionView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.mnu_search));
+        searchActionView.setQueryHint("Search or add...");
+        searchActionView.setIconifiedByDefault(true);
+        //searchActionView.setImeOptions(EditorInfo.IME_ACTION_NONE);
+        searchActionView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                MenuItemCompat.collapseActionView(searchMenuItem);
+                mMainPresenter.onSearchTextChanged("");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                mMainPresenter.onSearchTextChanged(newText);
+                searchMenuItem.setIcon(getResources().getDrawable(R.drawable.plus));
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -165,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void setSearchText(String text) {
-        mTxtSearch.setText(text);
+        //mTxtSearch.setText(text);
+        // TODO
     }
 }

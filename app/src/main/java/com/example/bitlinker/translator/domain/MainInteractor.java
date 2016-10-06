@@ -7,7 +7,6 @@ import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.translateapi.ITranslateApi;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import rx.Single;
 import rx.schedulers.Schedulers;

@@ -60,6 +60,7 @@ public class StorioDaoApi implements IDaoApi {
     public Single<List<TranslatedText>> getEntriesList() {
         Query query = Query.builder()
                 .table(TranslationsTable.TABLE)
+                .orderBy(TranslationsTable.COLUMN_ID + " DESC")
                 .build();
 
         return getEntriesListWithQuery(query);
@@ -71,6 +72,7 @@ public class StorioDaoApi implements IDaoApi {
                 .table(TranslationsTable.TABLE)
                 .where("LOWER(" + TranslationsTable.COLUMN_ORIGINAL_TEXT + ") LIKE LOWER(?) OR LOWER(" + TranslationsTable.COLUMN_TRANSLATED_TEXT + ") LIKE LOWER(?)")
                 .whereArgs(new ArrayList<Object>() {{add(wildcard); add(wildcard);}})
+                .orderBy(TranslationsTable.COLUMN_ID + " DESC")
                 .build();
         return getEntriesListWithQuery(query);
     }

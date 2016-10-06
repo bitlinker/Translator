@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="translator_copyright"><a href="http://translate.yandex.ru/">Переведено сервисом «Яндекс.Переводчик»</a></string>
+    <string name="action_settings">Настройки</string>
+    <string name="error_cant_translate">Не могу перевести слово</string>
+    <string name="translate_or_search">Перевести или найти…</string>
 </resources>

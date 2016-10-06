@@ -3,7 +3,6 @@ package com.example.bitlinker.translator.translateapi.yandex;
 import com.example.bitlinker.translator.model.TranslatedText;
 import com.example.bitlinker.translator.translateapi.ITranslateApi;
 import com.example.bitlinker.translator.translateapi.yandex.exceptions.YandexApiKeyBannedException;
-import com.example.bitlinker.translator.translateapi.yandex.exceptions.YandexIOException;
 import com.example.bitlinker.translator.translateapi.yandex.exceptions.YandexQuotaExceededException;
 import com.example.bitlinker.translator.translateapi.yandex.exceptions.YandexTextTooLongException;
 import com.example.bitlinker.translator.translateapi.yandex.exceptions.YandexTranslateException;
@@ -21,7 +20,6 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -33,8 +31,6 @@ import retrofit2.http.Query;
 import rx.Observable;
 import rx.Single;
 import rx.exceptions.OnErrorThrowable;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
 /**
  * Created by bitlinker on 20.08.2016.

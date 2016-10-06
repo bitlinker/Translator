@@ -7,7 +7,6 @@ TODO:
 - fragments instead of activities
 - preferences
 - about
-- rm retrolambda
 - clear up dagger
 - improve xml
 - lint
